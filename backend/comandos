@@ -1,0 +1,9 @@
+Cria a migrate
+  yarn sequelize migration:create --name=create-users
+
+Roda a migrate :
+  yarn sequelize db:migrate
+
+Desfaz a migrate:
+ yarn sequelize migration:undo
+ yarn sequelize migration:undo:all

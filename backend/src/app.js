@@ -7,6 +7,8 @@ import AppError from './errors/AppError';
 
 import './database';
 
+require('dotenv/config');
+
 const app = express();
 
 app.use(express.json());
@@ -20,7 +22,7 @@ app.use((err, req, res, next) => {
     });
   }
 
-  console.error('error', err);
+  console.error(process.env.DB_USERNAME);
 
   return res.status(500).json({
     status: 'error',

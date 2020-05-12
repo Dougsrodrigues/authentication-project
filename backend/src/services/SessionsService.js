@@ -1,24 +1,32 @@
 import { compare } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
 
 import User from '../models/User';
 
 import AppError from '../errors/AppError';
+import authConfig from '../config/auth';
 
 class SessionsService {
   async execute({ email, password }) {
-    const user = await User.findOne({ where: email });
+    const { secret, expiresIn } = authConfig.jwt;
+    const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      throw new AppError('Email/password wrong ');
+      throw new AppError('Email/password is wrong');
     }
 
-    const hashedPassword = await compare(password, user.password);
+    const passwordMatched = await compare(password, user.password_hash);
 
-    if (!hashedPassword) {
-      throw new AppError('Email/password wrong ');
+    if (!passwordMatched) {
+      throw new AppError('Email/password is wrong ');
     }
 
-    return user;
+    const token = sign({}, secret, {
+      subject: user.id,
+      expiresIn,
+    });
+
+    return { user, token };
   }
 }
 

@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { darken } from 'polished';
+
 import UserIcon from '../../assets/user.svg';
 import PasswordIcon from '../../assets/password.svg';
 
@@ -50,15 +52,10 @@ const Content = styled.div`
   }
 `;
 
-const Form = styled.form.attrs((props) => {})`
+const FormContent = styled.div`
   margin-top: 32px;
   display: flex;
   flex-direction: column;
-
-  label {
-    opacity: 0.5;
-    color: #ffffff;
-  }
 
   button {
     padding: 12px;
@@ -66,35 +63,13 @@ const Form = styled.form.attrs((props) => {})`
     border-radius: 15px;
     border: none;
     color: #273352;
+
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: ${darken(0.3, '#FFF')};
+    }
   }
 `;
 
-const InputUser = styled.input`
-  flex: 1;
-  padding: 12px 24px;
-  background: transparent;
-  color: #ffffff;
-  border: none;
-  border-bottom: 1px solid white;
-  background-repeat: no-repeat;
-  background-size: 18px 18px;
-  background-position: 95% center;
-
-  background-image: url(${UserIcon});
-`;
-
-const InputPassword = styled.input`
-  flex: 1;
-  padding: 12px 24px;
-  background: transparent;
-  color: #ffffff;
-  border: none;
-  border-bottom: 1px solid white;
-  background-repeat: no-repeat;
-  background-size: 18px 18px;
-  background-position: 95% center;
-
-  background-image: url(${PasswordIcon});
-`;
-
-export { Container, Content, Form, InputUser, InputPassword };
+export { Container, Content, FormContent };

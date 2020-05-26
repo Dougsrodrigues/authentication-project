@@ -1,35 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { Form } from '@unform/web';
+import getValidationErrors from '../../utils/getValidationErrors';
 import api from '../../services/api';
 
 import { Container, Content, FormContent } from './styles';
 import loginValidateSchema from './SchemaValidation';
 import Diamond from '../../assets/diamond.svg';
-import UserIcon from '../../assets/user.svg';
+import Mail from '../../assets/mail.svg';
 import PasswordIcon from '../../assets/password.svg';
-
 import Input from '../../components/commom/Input';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const formRef = useRef(null);
 
-  const handleSubmit = async (values) => {
-    console.log(values);
-  };
+  const handleSubmit = useCallback(async (values) => {
+    try {
+      formRef.current.setErrors({});
 
-  const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    if (name === 'email') {
-      setEmail(value);
+      await loginValidateSchema.validate(values, {
+        abortEarly: false,
+      });
+    } catch (err) {
+      const errors = getValidationErrors(err);
+      formRef.current.setErrors(errors);
     }
-
-    if (name === 'password') {
-      setPassword(value);
-    }
-  };
+  }, []);
 
   return (
     <Container>
@@ -40,13 +35,13 @@ export default function Login() {
           <p>
             Hello there! Sign in and start managing your TrueDiamond account
           </p>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} ref={formRef}>
             <FormContent>
               <Input
                 name="email"
                 placeholder="E-mail"
                 type="email"
-                icon={UserIcon}
+                icon={Mail}
               />
               <Input
                 name="password"

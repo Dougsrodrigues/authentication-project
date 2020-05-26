@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Input = styled.input`
   flex: 1;
-  padding: 12px 24px;
+  padding: 15px 10px;
   background: transparent;
   color: #ffffff;
   border: none;
@@ -11,4 +11,14 @@ export const Input = styled.input`
   background-repeat: no-repeat;
   background-size: 18px 18px;
   background-position: 95% center;
+`;
+
+export const Container = styled.div`
+  flex: 1;
+  background: transparent;
+  border: none;
+
+  span {
+    color: #f20f4b;
+  }
 `;

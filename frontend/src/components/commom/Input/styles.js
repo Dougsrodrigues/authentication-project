@@ -19,6 +19,7 @@ export const Container = styled.div`
   border: none;
 
   span {
+    text-align: start;
     color: #f20f4b;
   }
 `;

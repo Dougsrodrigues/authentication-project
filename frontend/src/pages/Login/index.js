@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Form } from '@unform/web';
 import getValidationErrors from '../../utils/getValidationErrors';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
 
 import { Container, Content, FormContent } from './styles';
@@ -13,13 +15,34 @@ import Input from '../../components/commom/Input';
 export default function Login() {
   const formRef = useRef(null);
 
+  const dispatchSignIn = useDispatch();
+  const userInfo = useSelector((state) => state.signIn);
+
+  const singIn = async (values) => {
+    const { email, password } = values;
+    try {
+      const { data } = await api.post('/sessions', {
+        email,
+        password,
+      });
+
+      dispatchSignIn({ type: 'SIGN_IN', data });
+
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleSubmit = useCallback(async (values) => {
     try {
       formRef.current.setErrors({});
 
-      await loginValidateSchema.validate(values, {
+      loginValidateSchema.validate(values, {
         abortEarly: false,
       });
+
+      await singIn(values);
     } catch (err) {
       const errors = getValidationErrors(err);
       formRef.current.setErrors(errors);
@@ -49,7 +72,20 @@ export default function Login() {
                 type="password"
                 icon={PasswordIcon}
               />
+
+              <span>
+                New user? Click<Link to="/signup"> here!</Link>
+              </span>
+
               <button type="submit">SIGN IN NOW</button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  console.log(userInfo);
+                }}
+              >
+                PRINTA REDUX
+              </button>
             </FormContent>
           </Form>
         </div>

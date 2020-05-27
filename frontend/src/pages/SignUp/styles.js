@@ -70,6 +70,16 @@ const FormContent = styled.div`
       background-color: ${darken(0.3, '#FFF')};
     }
   }
+
+  span {
+    margin-top: 4px;
+    text-align: end;
+    color: white;
+    a {
+      text-decoration: none;
+      color: #911df3;
+    }
+  }
 `;
 
 export { Container, Content, FormContent };

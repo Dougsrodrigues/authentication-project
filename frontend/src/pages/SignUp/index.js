@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef } from 'react';
 import { Form } from '@unform/web';
 import getValidationErrors from '../../utils/getValidationErrors';
 import api from '../../services/api';
+import { Link } from 'react-router-dom';
 
 import { Container, Content, FormContent } from './styles';
 import loginValidateSchema from './SchemaValidation';
@@ -56,6 +57,11 @@ export default function SignUp() {
                 type="password"
                 icon={PasswordIcon}
               />
+
+              <span>
+                Click to <Link to="/"> sign in!</Link>
+              </span>
+
               <button type="submit">REGISTER</button>
             </FormContent>
           </Form>

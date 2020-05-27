@@ -16,7 +16,7 @@ export default function Login() {
   const formRef = useRef(null);
 
   const dispatchSignIn = useDispatch();
-  const userInfo = useSelector((state) => state.signIn);
+  const userInfo = useSelector((state) => state);
 
   const singIn = async (values) => {
     const { email, password } = values;
@@ -78,14 +78,6 @@ export default function Login() {
               </span>
 
               <button type="submit">SIGN IN NOW</button>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  console.log(userInfo);
-                }}
-              >
-                PRINTA REDUX
-              </button>
             </FormContent>
           </Form>
         </div>

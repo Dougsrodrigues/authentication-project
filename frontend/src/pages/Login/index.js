@@ -4,6 +4,7 @@ import { Form } from '@unform/web';
 import getValidationErrors from '../../utils/getValidationErrors';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
+import { ValidationError } from 'yup';
 
 import { Container, Content, FormContent } from './styles';
 import loginValidateSchema from './SchemaValidation';
@@ -20,18 +21,15 @@ export default function Login() {
 
   const singIn = async (values) => {
     const { email, password } = values;
-    try {
-      const { data } = await api.post('/sessions', {
-        email,
-        password,
-      });
 
-      dispatchSignIn({ type: 'SIGN_IN', data });
+    const { data } = await api.post('/sessions', {
+      email,
+      password,
+    });
 
-      console.log(data);
-    } catch (err) {
-      console.log(err);
-    }
+    dispatchSignIn({ type: 'SIGN_IN', data });
+
+    console.log(data);
   };
 
   const handleSubmit = useCallback(async (values) => {
@@ -44,8 +42,10 @@ export default function Login() {
 
       await singIn(values);
     } catch (err) {
-      const errors = getValidationErrors(err);
-      formRef.current.setErrors(errors);
+      if (err instanceof ValidationError) {
+        const errors = getValidationErrors(err);
+        formRef.current.setErrors(errors);
+      }
     }
   }, []);
 

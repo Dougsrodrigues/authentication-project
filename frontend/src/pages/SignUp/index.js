@@ -2,7 +2,9 @@ import React, { useState, useCallback, useRef } from 'react';
 import { Form } from '@unform/web';
 import getValidationErrors from '../../utils/getValidationErrors';
 import api from '../../services/api';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { ValidationError } from 'yup';
+import { toast } from 'react-toastify';
 
 import { Container, Content, FormContent } from './styles';
 import loginValidateSchema from './SchemaValidation';
@@ -15,6 +17,11 @@ import Input from '../../components/commom/Input';
 export default function SignUp() {
   const formRef = useRef(null);
 
+  const signUp = async (values) => {
+    const { name, email, password } = values;
+    await api.post('/users', { name, email, password_hash: password });
+  };
+
   const handleSubmit = useCallback(async (values) => {
     try {
       formRef.current.setErrors({});
@@ -22,9 +29,17 @@ export default function SignUp() {
       await loginValidateSchema.validate(values, {
         abortEarly: false,
       });
+
+      await signUp(values);
+
+      toast.success('The user was register');
     } catch (err) {
-      const errors = getValidationErrors(err);
-      formRef.current.setErrors(errors);
+      if (err instanceof ValidationError) {
+        const errors = getValidationErrors(err);
+        formRef.current.setErrors(errors);
+        return;
+      }
+      toast.error(err.response.data.message);
     }
   }, []);
 

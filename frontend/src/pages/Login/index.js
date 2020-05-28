@@ -29,8 +29,6 @@ export default function Login() {
     });
 
     dispatchSignIn({ type: 'SIGN_IN', data });
-
-    console.log(data);
   };
 
   const handleSubmit = useCallback(async (values) => {
@@ -46,6 +44,7 @@ export default function Login() {
       if (err instanceof ValidationError) {
         const errors = getValidationErrors(err);
         formRef.current.setErrors(errors);
+        return;
       }
       toast.error(err.response.data.message);
     }

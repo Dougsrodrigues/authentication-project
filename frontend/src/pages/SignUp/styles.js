@@ -71,7 +71,7 @@ const FormContent = styled.div`
     }
   }
 
-  span {
+  > span {
     margin-top: 4px;
     text-align: end;
     color: white;

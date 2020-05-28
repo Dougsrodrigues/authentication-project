@@ -18,7 +18,7 @@ export const Container = styled.div`
   background: transparent;
   border: none;
 
-  span {
+  > span {
     text-align: start;
     color: #f20f4b;
   }

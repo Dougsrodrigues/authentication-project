@@ -1,8 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
-import ToastComponent from './components/commom/Toast';
 import store from './store';
 import Routes from './routes';
 import GlobalStyles from './styles/global';
@@ -14,9 +14,9 @@ function App() {
         <BrowserRouter>
           <Routes></Routes>
         </BrowserRouter>
+        <ToastContainer />
+        <GlobalStyles />
       </Provider>
-      <ToastComponent />
-      <GlobalStyles />
     </>
   );
 }

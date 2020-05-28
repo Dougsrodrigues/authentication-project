@@ -5,6 +5,7 @@ import getValidationErrors from '../../utils/getValidationErrors';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import { ValidationError } from 'yup';
+import { toast } from 'react-toastify';
 
 import { Container, Content, FormContent } from './styles';
 import loginValidateSchema from './SchemaValidation';
@@ -36,7 +37,7 @@ export default function Login() {
     try {
       formRef.current.setErrors({});
 
-      loginValidateSchema.validate(values, {
+      await loginValidateSchema.validate(values, {
         abortEarly: false,
       });
 
@@ -46,6 +47,7 @@ export default function Login() {
         const errors = getValidationErrors(err);
         formRef.current.setErrors(errors);
       }
+      toast.error(err.response.data.message);
     }
   }, []);
 

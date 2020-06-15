@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { Redirect } from 'react-router';
+import { useDispatch } from 'react-redux';
 import { Form } from '@unform/web';
 import getValidationErrors from '../../utils/getValidationErrors';
 import { Link } from 'react-router-dom';
@@ -13,12 +14,14 @@ import Diamond from '../../assets/diamond.svg';
 import Mail from '../../assets/mail.svg';
 import PasswordIcon from '../../assets/password.svg';
 import Input from '../../components/commom/Input';
+import Button from '../../components/commom/Button';
 
-export default function Login() {
+export default function SignIn() {
   const formRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const dispatchSignIn = useDispatch();
-  const userInfo = useSelector((state) => state);
 
   const singIn = async (values) => {
     const { email, password } = values;
@@ -30,28 +33,32 @@ export default function Login() {
 
     dispatchSignIn({ type: 'SIGN_IN', data });
   };
-
   const handleSubmit = useCallback(async (values) => {
+    setLoading(true);
     try {
       formRef.current.setErrors({});
-
       await loginValidateSchema.validate(values, {
         abortEarly: false,
       });
-
       await singIn(values);
+      setLoading(false);
+      setIsLoggedIn(true);
     } catch (err) {
       if (err instanceof ValidationError) {
         const errors = getValidationErrors(err);
         formRef.current.setErrors(errors);
+        setLoading(false);
+        setIsLoggedIn(false);
         return;
       }
       toast.error(err.response.data.message);
+      setLoading(false);
+      setIsLoggedIn(false);
     }
   }, []);
-
   return (
     <Container>
+      {isLoggedIn && <Redirect to="/home" />}
       <Content>
         <div>
           <img src={Diamond}></img>
@@ -78,7 +85,7 @@ export default function Login() {
                 New user? Click<Link to="/signup"> here!</Link>
               </span>
 
-              <button type="submit">SIGN IN NOW</button>
+              <Button text={'SIGN IN NOW'} loading={loading} />
             </FormContent>
           </Form>
         </div>

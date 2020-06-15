@@ -13,9 +13,11 @@ import UserIcon from '../../assets/user.svg';
 import PasswordIcon from '../../assets/password.svg';
 import Mail from '../../assets/mail.svg';
 import Input from '../../components/commom/Input';
+import Button from '../../components/commom/Button';
 
 export default function SignUp() {
   const formRef = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   const signUp = async (values) => {
     const { name, email, password } = values;
@@ -23,6 +25,7 @@ export default function SignUp() {
   };
 
   const handleSubmit = useCallback(async (values) => {
+    setLoading(true);
     try {
       formRef.current.setErrors({});
 
@@ -33,12 +36,15 @@ export default function SignUp() {
       await signUp(values);
 
       toast.success('The user was register');
+      setLoading(false);
     } catch (err) {
       if (err instanceof ValidationError) {
         const errors = getValidationErrors(err);
         formRef.current.setErrors(errors);
+        setLoading(false);
         return;
       }
+      setLoading(false);
       toast.error(err.response.data.message);
     }
   }, []);
@@ -77,7 +83,7 @@ export default function SignUp() {
                 Click to <Link to="/"> sign in!</Link>
               </span>
 
-              <button type="submit">REGISTER</button>
+              <Button text={'REGISTER'} loading={loading} />
             </FormContent>
           </Form>
         </div>
